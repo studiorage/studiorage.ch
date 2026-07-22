@@ -1,0 +1,16 @@
+PORTFOLIO UPDATE — V13
+
+Favicon
+- Replace images/favicon.svg with your own favicon while keeping the same filename.
+
+Asset mapping
+- The requested sch1 preview uses the supplied ach1.png file (copied as images/portfolio/sch1.png).
+- sch6.png is available only after opening sch2 and scrolling horizontally.
+- bt2.png is available only after opening bt1 and scrolling horizontally.
+- sch9.png is included as an additional detail slide under sch7.
+- wst5.png is included as an additional detail slide under wst1.
+
+Videos
+- The uploaded media archive did not contain files named vid1.mp4 or vid2.mp4.
+- To keep the grid functional, the website's existing short videos/2.mp4 and videos/3.mp4 were copied to videos/vid1.mp4 and videos/vid2.mp4.
+- Replace those two files later with the intended videos while keeping the filenames.

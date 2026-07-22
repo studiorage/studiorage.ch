@@ -1,0 +1,9 @@
+STUDIO RAGE — V11 MASONRY PORTFOLIO UPDATE
+
+1. Replaced the eight titled/scroll-driven portfolio chapters with a full-width, title-free image gallery.
+2. Added 12 clickable project tiles.
+3. Built an asymmetric three-column desktop mosaic using different tile sizes and ratios, with narrow black gutters.
+4. Added responsive two-column mosaic layouts for tablet and mobile.
+5. Preserved the existing full-screen project-detail carousel and source-ratio behavior.
+6. Added four additional project-detail data entries so every gallery image opens a working detail view.
+7. Kept the project grid compatible with sequential local image assets and Portable Visual CMS fields.

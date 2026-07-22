@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Studio Rage — Loader</title>
+<style>
+  :root{
+    --bg:#000;
+    --fg:#fff;
+  }
+  html,body{
+    margin:0;padding:0;width:100%;height:100%;
+    background:var(--bg);
+    overflow:hidden;
+  }
+  .stage{
+    width:100%;height:100vh;
+    display:flex;align-items:center;justify-content:center;
+    background:var(--bg);
+    transition: opacity .45s ease;
+  }
+  .stage.fade-out{ opacity:0; }
+
+  .logo-row{
+    display:flex;align-items:baseline;
+    font-family:"Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight:500;
+    font-size:clamp(40px, 8vw, 110px);
+    color:var(--fg);
+    letter-spacing:-0.01em;
+    white-space:nowrap;
+  }
+
+  /* "Studio" hidden behind a mask, slides + reveals in from the left */
+  .studio-wrap{
+    display:inline-block;
+    overflow:hidden;
+    width:0;
+    transition: width .42s cubic-bezier(.65,0,.35,1);
+  }
+  .studio-wrap.reveal{ width: var(--studio-w, 300px); }
+
+  .studio-text{
+    display:inline-block;
+    transform: translateX(-28px);
+    transition: transform .42s cubic-bezier(.65,0,.35,1);
+    padding-right: 0.28em; /* gap before "Rage" */
+  }
+  .studio-wrap.reveal .studio-text{ transform: translateX(0); }
+
+  .word{
+    display:inline-flex;
+    position:relative;
+  }
+
+  .letter{
+    display:inline-block;
+    position:relative;
+    overflow:hidden;
+    opacity:0;
+    transform: translateY(6px);
+    transition: opacity .13s ease, transform .13s ease, width .16s ease;
+    will-change: transform, width;
+  }
+  .letter.in{ opacity:1; transform:translateY(0); }
+  .letter.deleting{ opacity:0; transform: translateY(-6px) scale(.85); }
+
+  .letter .ch{ display:inline-block; }
+  .letter.pop .ch{ transition: transform .12s ease; }
+  .letter.pop.up .ch{ transform: scale(1.2); }
+
+  .ch-badge{
+    position:absolute;
+    top:-0.04em;
+    right:-0.27em;
+    width:0.28em;
+    height:0.28em;
+    box-sizing:border-box;
+    border:0.021em solid var(--fg);
+    border-radius:50%;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    opacity:0;
+    transform:scale(0);
+    transition: transform .38s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
+  }
+  .ch-badge.show{ opacity:1; transform:scale(1); }
+  .ch-badge-text{
+    font-size:0.145em;
+    font-weight:500;
+    line-height:1;
+  }
+</style>
+</head>
+<body>
+
+<div class="stage" id="stage">
+  <div class="logo-row">
+    <span class="studio-wrap" id="studioWrap"><span class="studio-text" id="studioText">Studio</span></span><span class="word" id="word"><span class="ch-badge" id="chBadge"><span class="ch-badge-text">CH</span></span></span>
+  </div>
+</div>
+
+<script>
+(function(){
+  const wordEl     = document.getElementById('word');
+  const studioWrap = document.getElementById('studioWrap');
+  const studioText = document.getElementById('studioText');
+  const stage      = document.getElementById('stage');
+
+  const FULL = "amouzegar".split('');
+  const DELETE_COUNT = 5; // deletes "amouz", leaves "egar"
+
+  let letters = [];
+
+  function makeLetter(ch){
+    const span = document.createElement('span');
+    span.className = 'letter';
+    const inner = document.createElement('span');
+    inner.className = 'ch';
+    inner.textContent = ch;
+    span.appendChild(inner);
+    return span;
+  }
+
+  // 1. Fade in "amouzegar" as a whole on the black background
+  function fadeInWord(){
+    FULL.forEach(ch=>{
+      const span = makeLetter(ch);
+      wordEl.appendChild(span);
+      letters.push(span);
+    });
+    requestAnimationFrame(()=> requestAnimationFrame(()=>{
+      letters.forEach(span => span.classList.add('in'));
+    }));
+    setTimeout(startDelete, 480);
+  }
+
+  // 2. Backspace-style undo delete of the first 5 letters ("amouz")
+  function deleteFront(count, done){
+    if(count === 0){ done(); return; }
+    const span = letters[0];
+
+    const w = span.getBoundingClientRect().width;
+    span.style.width = w + 'px';
+    span.classList.add('deleting');
+
+    requestAnimationFrame(()=> requestAnimationFrame(()=>{
+      span.style.width = '0px';
+    }));
+
+    setTimeout(()=>{
+      span.remove();
+      letters.shift();
+      deleteFront(count - 1, done);
+    }, 140);
+  }
+
+  function startDelete(){
+    deleteFront(DELETE_COUNT, ()=> setTimeout(reverseToRage, 180));
+  }
+
+  // 3. Reverse "egar" -> "rage" via FLIP animation
+  function reverseToRage(){
+    const first = letters.map(el => el.getBoundingClientRect());
+
+    const reversed = [...letters].reverse();
+    reversed.forEach(el => wordEl.appendChild(el));
+    letters = reversed;
+
+    const last = letters.map(el => el.getBoundingClientRect());
+    const n = letters.length;
+
+    letters.forEach((el, idx)=>{
+      const oldRect = first[n - 1 - idx];
+      const dx = oldRect.left - last[idx].left;
+      el.style.transition = 'none';
+      el.style.transform = 'translateX(' + dx + 'px)';
+    });
+
+    requestAnimationFrame(()=> requestAnimationFrame(()=>{
+      letters.forEach(el=>{
+        el.style.transition = 'transform .36s cubic-bezier(.65,0,.35,1)';
+        el.style.transform = 'translateX(0)';
+      });
+    }));
+
+    setTimeout(capitalizeR, 400);
+  }
+
+  // 4. Pop the leading "r" into capital "R"
+  function capitalizeR(){
+    const rSpan = letters[0];
+    const inner = rSpan.querySelector('.ch');
+    rSpan.classList.add('pop');
+    requestAnimationFrame(()=> rSpan.classList.add('up'));
+
+    setTimeout(()=>{ inner.textContent = 'R'; }, 100);
+    setTimeout(()=>{ rSpan.classList.remove('up'); }, 115);
+    setTimeout(()=>{
+      rSpan.classList.remove('pop');
+      slideStudio();
+    }, 240);
+  }
+
+  // 5. "Studio" slides in from behind the mask, settling left of "Rage"
+  function slideStudio(){
+    const w = studioText.getBoundingClientRect().width;
+    studioWrap.style.setProperty('--studio-w', w + 'px');
+    requestAnimationFrame(()=> studioWrap.classList.add('reveal'));
+    setTimeout(popBadge, 320);
+  }
+
+  // 5b. CH badge pops out, like the reference logo
+  function popBadge(){
+    const badge = document.getElementById('chBadge');
+    badge.classList.add('show');
+    setTimeout(finish, 480);
+  }
+
+  // 6. Hold, then fade to black
+  function finish(){
+    setTimeout(()=>{
+      stage.classList.add('fade-out');
+    }, 1000);
+    setTimeout(()=>{
+      // Hook point: remove/hide the loader from your real site here
+      document.dispatchEvent(new CustomEvent('loaderComplete'));
+    }, 1450);
+  }
+
+  fadeInWord();
+})();
+</script>
+
+</body>
+</html>

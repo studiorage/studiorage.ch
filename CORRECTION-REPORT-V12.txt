@@ -1,0 +1,10 @@
+STUDIO RAGE — V12 RESPONSIVE GALLERY AND AI WORKFLOW UPDATE
+
+1. Rebalanced the 12-image portfolio gallery toward portrait formats.
+2. The desktop gallery now uses three masonry columns with eight strongly vertical tiles, two near-square tiles and only two landscape-oriented tiles.
+3. Preserved the full-width, title-free gallery and the existing clickable project-detail carousel.
+4. Retained a two-column responsive masonry layout for tablets and mobile.
+5. Removed horizontal overflow from the Human + AI workflow.
+6. The workflow now uses a fluid six-step layout on wide screens, two columns on medium screens and one column on small screens.
+7. Workflow arrows disappear when the sequence wraps, while the numbered steps preserve a clear reading order.
+8. Added safe text wrapping and container constraints so no horizontal scrollbar appears.

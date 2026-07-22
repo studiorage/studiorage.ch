@@ -1,0 +1,14 @@
+STUDIO RAGE — LIVE WEBSITE PREVIEW UPDATE
+
+Changes made:
+- Replaced screenshot/activation-button previews with seven live external iframes.
+- Added the requested websites in the specified order.
+- Removed “See more” from the website portfolio section.
+- Kept one “Visit website” button per project, opening the real website in a new tab/window.
+- Removed iframe sandbox restrictions so embedded websites can scroll, navigate, run scripts, use forms and open their own links normally.
+- Reworked desktop scroll transitions for seven projects.
+- Added responsive stacked live previews on tablet and mobile.
+- Added browser-style URL labels and loading states.
+
+Important browser limitation:
+A remote website can prevent all third-party embedding using its own X-Frame-Options or Content-Security-Policy frame-ancestors response headers. Parent-page HTML or JavaScript cannot override those security headers. The “Visit website” button remains available in that case.

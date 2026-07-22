@@ -1,0 +1,7 @@
+/videos/*.mp4
+  Content-Type: video/mp4
+  Accept-Ranges: bytes
+
+/videos/*.webm
+  Content-Type: video/webm
+  Accept-Ranges: bytes

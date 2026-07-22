@@ -1,0 +1,30 @@
+STUDIO RAGE — V10 UPDATE
+Date: 21 July 2026
+
+1. SELECTED VISUAL WORK
+- Expanded the first portfolio from 3 to 8 projects.
+- Changed all portfolio cover frames to a portrait 4:5 ratio.
+- Made the desktop scroll length and project counter dynamic according to the number of projects.
+- Preserved the stacked mobile layout for all 8 projects.
+
+2. PROJECT DETAIL CAROUSEL
+- Detail images and videos now preserve their complete source aspect ratio.
+- Portrait media displays in a portrait-sized frame.
+- Landscape media displays in a landscape-sized frame.
+- Media uses object-fit: contain, so the source is not cropped.
+- Slide dimensions recalculate after loading and when the browser is resized.
+
+3. REMOVED SECTION
+- Removed the complete “A clear path from question to launch” website-process section.
+
+4. HUMAN-CONTROLLED AI WORKFLOW
+- Replaced the previous agent diagram with a clearer six-step hybrid workflow.
+- New sequence: human objective → human configuration → local/custom AI tools → automated workflow → human review → approved action.
+- Removed the “Content production” AI example.
+- Added interactive examples for Marketing & Ads, Prospect Finding, Planning and Sales Operations.
+- Clarified that strategic decisions, validation and final approval remain human-controlled.
+
+5. VALIDATION
+- Verified 8 portfolio entries and matching project-data records.
+- Verified local image, video, CSS and JavaScript references.
+- JavaScript syntax checks passed for all site scripts.

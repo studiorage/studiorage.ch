@@ -1,0 +1,37 @@
+:root {
+    --black: #050505;
+    --black-soft: #0c0c0c;
+    --white: #ffffff;
+    --white-soft: #f2f2ee;
+    --gray: #a5a5a0;
+
+    /* Minimal accent system. Legacy red variable names remain as aliases so
+       existing CMS-safe component selectors keep working without markup edits. */
+    --blue: #0066ff;
+    --blue-dark: #001d52;
+    --blue-light: #78aaff;
+    --blue-faint: rgba(0,102,255,.12);
+    --red: var(--blue);
+    --red-dark: var(--blue-dark);
+    --red-light: var(--blue-light);
+    --gradient-blue: linear-gradient(135deg, #001d52 0%, #0066ff 55%, #78aaff 100%);
+    --gradient-blue-soft: linear-gradient(110deg, rgba(0,29,82,.5), rgba(0,102,255,.18), transparent 76%);
+    --gradient-red: var(--gradient-blue);
+    --gradient-red-soft: var(--gradient-blue-soft);
+
+    --background: var(--black);
+    --surface: var(--black-soft);
+    --text: var(--white);
+    --text-muted: var(--gray);
+    --border: rgba(255,255,255,.18);
+    --border-strong: rgba(255,255,255,.42);
+    --font-display: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --font-body: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --page-gutter: clamp(1rem, 3vw, 3.5rem);
+    --radius: .65rem;
+    --header-height: 5.5rem;
+    --ease: cubic-bezier(.22, 1, .36, 1);
+    --ease-in-out: cubic-bezier(.76, 0, .24, 1);
+    --parallax-strength: 1;
+    --shadow: 0 2rem 6rem rgba(0,0,0,.45);
+}

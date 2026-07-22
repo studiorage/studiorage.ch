@@ -1,0 +1,38 @@
+STUDIO RAGE — CORRECTION REPORT V8
+==================================
+
+1. HOMEPAGE VIDEO
+- videos/1.mp4 is confirmed as browser-compatible H.264 / AAC, 1920 × 1080.
+- The MP4 metadata was moved to the beginning of the file (fast start) for progressive browser loading.
+- The poster dependency was removed from the homepage showreel.
+- The reel now lives in a dedicated 220svh scroll section instead of inside the hero layout.
+- The video reveals progressively while scrolling, reaches a true 100dvh full-screen frame, remains full-screen briefly, then releases into the rest of the page.
+- Muted autoplay, loop, playsinline, preload and intersection-based play/pause behavior are included.
+
+2. PORTFOLIO
+- project.html and its project-page scripts were removed.
+- All visual and website See more actions now open one reusable full-screen black overlay.
+- Vertical mouse-wheel and touch scrolling move the gallery horizontally.
+- Project title is fixed bottom-left.
+- Current/total progression and progress line are fixed bottom-right.
+- Escape, close, previous/next, focus return, scroll locking and responsive mobile behavior are included.
+- Gallery content remains editable in js/projects-data.js.
+
+3. NEW FILES
+- css/corrections.css
+- js/reel-scroll.js
+- js/project-carousel.js
+
+4. VALIDATION
+- All JavaScript files pass syntax validation.
+- All CSS files pass PostCSS parsing.
+- index.html contains no project.html references.
+- All local scripts, styles, images, videos and iframe paths referenced by index.html exist.
+
+5. VIDEO DELIVERY COMPATIBILITY PATCH
+- videos/1.mp4 was re-encoded as H.264 Baseline / yuv420p with fast-start metadata.
+- videos/1.webm was added as a VP9 / Opus browser fallback.
+- The HTML now declares explicit MP4 and WebM source types.
+- Error display is delayed until all source candidates have failed.
+- Playback is retried after the first pointer, touch or keyboard interaction for embedded previews.
+- .htaccess and _headers MIME declarations were added for common static hosting platforms.
