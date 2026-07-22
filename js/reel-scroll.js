@@ -2,13 +2,21 @@
     const section = document.querySelector(".hero-reel");
     const isFrench = document.documentElement.lang.toLowerCase().startsWith("fr");
     const video = section && section.querySelector(".hero-reel__video");
+    const frame = section && section.querySelector(".hero-reel__frame");
     const status = section && section.querySelector(".hero-reel__label span:last-child");
-    if (!section || !video) return;
+    if (!section || !video || !frame) return;
 
     const reducedMotion = window.matchMedia("(prefers-reduced-motion: reduce)");
     let frameRequested = false;
     let loadFailed = false;
     let errorTimer = 0;
+    let reelIsVisible = false;
+    let playbackStarted = false;
+
+    // Prevent the browser and the generic autoplay manager from starting this reel on page load.
+    video.autoplay = false;
+    video.removeAttribute("autoplay");
+    video.pause();
 
     const clamp = value => Math.min(1, Math.max(0, value));
     const easeOut = value => 1 - Math.pow(1 - value, 3);
@@ -62,10 +70,36 @@
         requestAnimationFrame(update);
     }
 
+    function rewindVideo() {
+        const rewind = () => {
+            try {
+                video.currentTime = 0;
+            } catch (_) {}
+        };
+
+        if (video.readyState >= 1) rewind();
+        else video.addEventListener("loadedmetadata", rewind, { once: true });
+    }
+
     function attemptPlayback() {
+        if (!reelIsVisible || document.visibilityState === "hidden") return;
         if (video.readyState === 0) video.load();
         const promise = video.play();
         if (promise && typeof promise.catch === "function") promise.catch(() => {});
+    }
+
+    function startReel() {
+        if (!playbackStarted) {
+            rewindVideo();
+            playbackStarted = true;
+        }
+        attemptPlayback();
+    }
+
+    function stopAndResetReel() {
+        video.pause();
+        rewindVideo();
+        playbackStarted = false;
     }
 
     video.addEventListener("loadedmetadata", markReady);
@@ -78,16 +112,29 @@
     if (video.readyState >= 1) markReady();
     else video.load();
 
+    // Start only once the reel itself is visibly entering the viewport.
     const observer = new IntersectionObserver(entries => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) attemptPlayback();
-            else video.pause();
+            reelIsVisible = entry.isIntersecting;
+            if (entry.isIntersecting) startReel();
+            else stopAndResetReel();
         });
-    }, { threshold: .01, rootMargin: "200px 0px" });
-    observer.observe(section);
+    }, {
+        threshold: .15,
+        rootMargin: "0px"
+    });
+    observer.observe(frame);
 
+    // Retry only while the reel is visible, for browsers with stricter playback policies.
     ["pointerdown", "touchstart", "keydown"].forEach(eventName => {
-        window.addEventListener(eventName, attemptPlayback, { once: true, passive: eventName !== "keydown" });
+        window.addEventListener(eventName, attemptPlayback, {
+            passive: eventName !== "keydown"
+        });
+    });
+
+    document.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "hidden") video.pause();
+        else if (reelIsVisible) attemptPlayback();
     });
 
     window.addEventListener("scroll", requestUpdate, { passive: true });
