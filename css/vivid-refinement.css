@@ -231,7 +231,7 @@ body.is-loader-active { overflow: hidden; }
 
 @media (prefers-reduced-motion: reduce) {
     .client-marquee__track { animation: none; }
-    .pointer-fire { display: none; }
+    .pointer-fire { opacity: .68; }
 }
 
 
@@ -284,10 +284,21 @@ main,
 
 .pointer-fire {
     z-index: 0;
+    display: block;
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
     opacity: .9;
-    mix-blend-mode: screen;
-    transform: translateZ(0);
-    will-change: contents;
+    mix-blend-mode: normal;
+    transform: none;
+    -webkit-transform: none;
+    will-change: auto;
+    contain: strict;
+    image-rendering: auto;
+}
+
+@media (pointer: coarse) {
+    .pointer-fire { opacity: .82; }
 }
 
 .pointer-fire--fallback {
