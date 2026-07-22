@@ -260,3 +260,35 @@ button { color: inherit; }
 .legal-main h1 { font-size: clamp(3rem,7vw,7rem); line-height: .9; letter-spacing: -.06em; }
 .legal-main h2 { margin-top: 3rem; }
 .legal-main p, .legal-main li { color: var(--text-muted); }
+
+/* GitHub-only fallback for websites that block iframe embedding. */
+.browser-frame__snapshot {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  color: inherit;
+}
+.browser-frame__snapshot img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top center;
+  transition: transform .5s ease;
+}
+.browser-frame__snapshot:hover img { transform: scale(1.015); }
+.browser-frame__snapshot-label {
+  position: absolute;
+  left: 1rem;
+  right: 1rem;
+  bottom: 1rem;
+  padding: .7rem .9rem;
+  border-radius: 999px;
+  background: rgba(0,0,0,.72);
+  color: #fff;
+  font-size: .78rem;
+  line-height: 1.2;
+  text-align: center;
+  backdrop-filter: blur(8px);
+}

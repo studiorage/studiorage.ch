@@ -1,0 +1,10 @@
+{
+  "name": "studio-rage-site-previews",
+  "private": true,
+  "scripts": {
+    "capture-previews": "node scripts/capture-shopify-previews.mjs"
+  },
+  "devDependencies": {
+    "playwright": "^1.55.0"
+  }
+}
