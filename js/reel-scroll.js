@@ -110,7 +110,6 @@
     video.querySelectorAll("source").forEach(source => source.addEventListener("error", markError));
 
     if (video.readyState >= 1) markReady();
-    else video.load();
 
     // Start only once the reel itself is visibly entering the viewport.
     const observer = new IntersectionObserver(entries => {

@@ -3,21 +3,23 @@
         node.textContent = new Date().getFullYear();
     });
 
-    const autoplayVideos = [...document.querySelectorAll("video[autoplay]")];
+    const autoplayVideos = [...document.querySelectorAll("video[data-autoplay], video[autoplay]")];
     if (!autoplayVideos.length) return;
 
     const visibleVideos = new Set();
 
     function prepareVideo(video) {
+        // Playback is controlled exclusively by the observer below. Removing
+        // native autoplay prevents off-screen videos from decoding at startup.
+        video.autoplay = false;
+        video.removeAttribute("autoplay");
         video.muted = true;
         video.defaultMuted = true;
         video.loop = true;
         video.playsInline = true;
-        video.autoplay = true;
         video.setAttribute("muted", "");
         video.setAttribute("loop", "");
         video.setAttribute("playsinline", "");
-        video.setAttribute("autoplay", "");
     }
 
     function playVideo(video) {

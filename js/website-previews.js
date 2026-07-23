@@ -9,16 +9,35 @@
     stage.style.setProperty("--website-count", String(projects.length));
     stage.style.setProperty("--website-scroll-height", `${projects.length * 100}svh`);
 
-    projects.forEach((project) => {
-        const iframe = project.querySelector(".browser-frame__live");
-        const viewport = project.querySelector(".browser-frame__viewport");
-        if (!iframe || !viewport) return;
+    function ensureFrameLoaded(project) {
+        const iframe = project && project.querySelector(".browser-frame__live");
+        const viewport = project && project.querySelector(".browser-frame__viewport");
+        if (!iframe || !viewport || iframe.getAttribute("src") || !iframe.dataset.src) return;
 
-        const markLoaded = () => viewport.classList.add("is-loaded");
-        iframe.addEventListener("load", markLoaded, { once: true });
+        iframe.addEventListener("load", () => viewport.classList.add("is-loaded"), { once: true });
+        iframe.src = iframe.dataset.src;
+    }
 
-        // The first preview is eager; later previews retain native lazy loading.
+    let stageIsNear = false;
+    const stageObserver = new IntersectionObserver(entries => {
+        stageIsNear = entries.some(entry => entry.isIntersecting);
+        if (stageIsNear) requestUpdate();
+    }, {
+        threshold: 0,
+        rootMargin: "700px 0px"
     });
+    stageObserver.observe(stage);
+
+    const mobileFrameObserver = new IntersectionObserver(entries => {
+        if (desktopQuery.matches) return;
+        entries.forEach(entry => {
+            if (entry.isIntersecting) ensureFrameLoaded(entry.target);
+        });
+    }, {
+        threshold: 0,
+        rootMargin: "500px 0px"
+    });
+    projects.forEach(project => mobileFrameObserver.observe(project));
 
     let frameRequested = false;
 
@@ -41,6 +60,10 @@
 
     function resetForStackedLayout() {
         projects.forEach((project) => {
+            if (stageIsNear) {
+                const rect = project.getBoundingClientRect();
+                if (rect.bottom >= -500 && rect.top <= window.innerHeight + 500) ensureFrameLoaded(project);
+            }
             project.classList.add("is-active");
             project.classList.remove("is-next", "is-previous");
             project.style.removeProperty("opacity");
@@ -68,6 +91,11 @@
         const lowerIndex = Math.min(lastIndex, Math.floor(scaled));
         const localProgress = lowerIndex === lastIndex ? 0 : scaled - lowerIndex;
         const activeIndex = Math.min(lastIndex, Math.round(scaled));
+
+        if (stageIsNear) {
+            ensureFrameLoaded(projects[activeIndex]);
+            ensureFrameLoaded(projects[Math.min(lastIndex, activeIndex + 1)]);
+        }
 
         projects.forEach((project, index) => {
             const isLower = index === lowerIndex;
