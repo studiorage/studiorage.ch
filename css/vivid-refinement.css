@@ -406,3 +406,54 @@ main,
 @media (max-width: 900px) {
     .site-header { background: rgba(5,5,5,.9); }
 }
+
+/* V13 — macOS/WebKit performance profile.
+   The shader remains visible, but costly full-page filters are removed on Mac. */
+.pointer-fire {
+    display: block !important;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    pointer-events: none;
+    contain: layout paint size;
+    image-rendering: auto;
+    filter: none;
+    -webkit-filter: none;
+}
+
+html.is-macos .pointer-fire,
+html.is-safari .pointer-fire {
+    opacity: .82;
+}
+
+html.is-macos .site-header,
+html.is-macos .project-modal__topbar,
+html.is-safari .site-header,
+html.is-safari .project-modal__topbar {
+    -webkit-backdrop-filter: none !important;
+    backdrop-filter: none !important;
+}
+
+html.is-macos .hero__media img,
+html.is-safari .hero__media img {
+    filter: saturate(.72) brightness(.92) !important;
+    -webkit-filter: saturate(.72) brightness(.92) !important;
+}
+
+html.is-macos .client-marquee__track,
+html.is-safari .client-marquee__track {
+    will-change: auto;
+}
+
+html.shader-fallback-active .pointer-fire {
+    contain: paint;
+}
+
+@media (pointer: coarse) {
+    .pointer-fire {
+        display: block !important;
+        visibility: visible !important;
+        opacity: .78;
+    }
+}
